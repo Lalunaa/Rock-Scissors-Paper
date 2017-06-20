@@ -11,13 +11,14 @@ const int NUM_SECONDS = 5;
 
 int main(int argc, const char** argv)
 {
-	double time_counter = 0;
+	double time_counter = 0;  
 	clock_t this_time = clock();
 	clock_t last_time = this_time;
 	int compChoice = (rand() % 3) + 1;
 	int playerChoice;
 	int computer = 0;
 	int player = 0;
+	bool finished = false;
 	VideoCapture cam(0);
 	if (!cam.isOpened()) {
 		cout << "ERROR not opened " << endl;
@@ -31,6 +32,8 @@ int main(int argc, const char** argv)
 	Mat rock = imread("rock.JPG", CV_LOAD_IMAGE_UNCHANGED);
 	Mat scissors = imread("scissors.JPG", CV_LOAD_IMAGE_UNCHANGED);
 	Mat paper = imread("paper.JPG", CV_LOAD_IMAGE_UNCHANGED);
+	Mat playerWin = imread("playerWin.JPG", CV_LOAD_IMAGE_UNCHANGED);
+	Mat computerWin = imread("computerWin.JPG", CV_LOAD_IMAGE_UNCHANGED);
 	namedWindow("Game", CV_WINDOW_AUTOSIZE);
 	namedWindow("Computer_choice", CV_WINDOW_AUTOSIZE);
 	char a[40];
@@ -83,7 +86,7 @@ int main(int argc, const char** argv)
 							hullPoint[i].push_back(contours[i][ind]);
 						}
 						count = 0;
-						for (size_t k = 0; k < defects[i].size(); k++) {
+						for (size_t k = 0; k < defects[i].size(); k++) { 
 							if (defects[i][k][3] > 13 * 256) {
 								int p_end = defects[i][k][1];
 								int p_far = defects[i][k][2];
@@ -150,12 +153,14 @@ int main(int argc, const char** argv)
 					else if (compChoice == 1)
 						player++;
 				}
-				if (compChoice == 1)
-					imshow("Computer_choice", rock);
-				else if (compChoice == 2)
-					imshow("Computer_choice", scissors);
-				else if (compChoice == 3)
-					imshow("Computer_choice", paper);
+				if (finished == false) {
+					if (compChoice == 1)
+						imshow("Computer_choice", rock);
+					else if (compChoice == 2)
+						imshow("Computer_choice", scissors);
+					else if (compChoice == 3)
+						imshow("Computer_choice", paper);
+				}
 			}
 			string timer = "Runda konczy sie za: " + to_string(5 - (int)(time_counter / 1000));
 			putText(flipped_game, timer, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 1, cvScalar(255, 255, 255), 1, CV_AA);
@@ -163,7 +168,22 @@ int main(int argc, const char** argv)
 			putText(flipped_game, computerScore, cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255, 255, 255), 1, CV_AA);
 			string playerScore = "Gracz: " + to_string(player);
 			putText(flipped_game, playerScore, cvPoint(30, 90), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255, 255, 255), 1, CV_AA);
-			imshow("Game", flipped_game);
+			if (finished == false) 
+				imshow("Game", flipped_game);
+			if (player >= 3) {
+				finished = true;
+				cvDestroyWindow("Computer_choice");
+				cvDestroyWindow("Game");
+				namedWindow("Score", CV_WINDOW_AUTOSIZE);
+				imshow("Score", playerWin);
+			}
+			else if (computer >= 3) {
+				finished = true;
+				cvDestroyWindow("Computer_choice");
+				cvDestroyWindow("Game");
+				namedWindow("Score", CV_WINDOW_AUTOSIZE);
+				imshow("Score", computerWin);
+			}
 			if (waitKey(10) == 27) break;
 		}
 	}
