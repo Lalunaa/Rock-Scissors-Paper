@@ -91,7 +91,7 @@ int main(int argc, const char** argv)
 								int p_end = defects[i][k][1];
 								int p_far = defects[i][k][2];
 								defectPoint[i].push_back(contours[i][p_far]);
-								circle(game_roi, contours[i][p_end], 3, Scalar(0, 255, 0), 2); 
+								//circle(game_roi, contours[i][p_end], 3, Scalar(0, 255, 0), 2); 
 								count++;
 							}
 
@@ -180,15 +180,16 @@ int main(int argc, const char** argv)
 			
 			if (finished == false) 
 				imshow("Game", flipped_game); 
-			if (player >= 5) {
-				finished = true;
+
+			if (player >= 5) {			
+				finished = true;				
 				cvDestroyWindow("Computer_choice");
 				cvDestroyWindow("Game");
 				namedWindow("Score", CV_WINDOW_AUTOSIZE);
 				imshow("Score", playerWin);
 			}
 			else if (computer >= 5) {
-				finished = true;
+				finished = true;				
 				cvDestroyWindow("Computer_choice");
 				cvDestroyWindow("Game");
 				namedWindow("Score", CV_WINDOW_AUTOSIZE);
