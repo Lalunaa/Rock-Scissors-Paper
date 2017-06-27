@@ -32,8 +32,8 @@ int main(int argc, const char** argv)
 	Mat rock = imread("rock.JPG", CV_LOAD_IMAGE_UNCHANGED); 
 	Mat scissors = imread("scissors.JPG", CV_LOAD_IMAGE_UNCHANGED);
 	Mat paper = imread("paper.JPG", CV_LOAD_IMAGE_UNCHANGED);
-	Mat playerWin = imread("playerWin.JPG", CV_LOAD_IMAGE_UNCHANGED);
-	Mat computerWin = imread("computerWin.JPG", CV_LOAD_IMAGE_UNCHANGED);
+	Mat playerWin = imread("playerWin.JPG", CV_LOAD_IMAGE_UNCHANGED); //źródło: https://www.colourbox.com/preview/23397043-businessman-holding-winning-trophy.jpg
+	Mat computerWin = imread("computerWin.JPG", CV_LOAD_IMAGE_UNCHANGED); //źródło: https://lh3.googleusercontent.com/proxy/wlv1DMMY0YrB76eE4kmFiWYFGUY2jF16pIYGkhUhbYS8Huv6n0rE3doimzwPsRwtbitxKYpzOgIo4KnaWhC3hUz0683hBDr5V9P6mjJSuTMpUz_LsV-p2PQm3rec5e6VyZEgaJM7Vr1MD_EMD24mSA=w530-h354-p-rw
 	namedWindow("Game", CV_WINDOW_AUTOSIZE); 
 	namedWindow("Computer_choice", CV_WINDOW_AUTOSIZE); 
 	char a[40]; 
@@ -45,7 +45,7 @@ int main(int argc, const char** argv)
 			return -1;
 		}
 		flip(game, flipped_game, 1); 
-		Rect rect(340, 100, 270, 270); 
+		Rect rect(50, 100, 270, 270); 
 		rectangle(
 			flipped_game,
 			rect,
@@ -55,7 +55,7 @@ int main(int argc, const char** argv)
 		cvtColor(game_roi, game_gray, CV_RGB2GRAY); 
 		GaussianBlur(game_gray, game_gray, Size(19, 19), 0.0, 0); 
 		threshold(game_gray, game_threshold, 0, 255, THRESH_BINARY_INV + THRESH_OTSU); 
-		vector<vector<Point> >contours;
+		vector<vector<Point> >contours;			//źródło: https://github.com/AmeyCaps/hand-gesture-recognition-opencv/blob/master/main.cpp
 		vector<Vec4i>hierarchy;
 		findContours(game_threshold, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point());  
 		if (contours.size() > 0) {
@@ -67,7 +67,7 @@ int main(int argc, const char** argv)
 					indexOfBiggestContour = i;
 				}
 			}
-			vector<vector<int> >hull(contours.size());
+			vector<vector<int> >hull(contours.size());		
 			vector<vector<Point> >hullPoint(contours.size());
 			vector<vector<Vec4i> >defects(contours.size());
 			vector<vector<Point> >defectPoint(contours.size());
@@ -94,7 +94,6 @@ int main(int argc, const char** argv)
 								//circle(game_roi, contours[i][p_end], 3, Scalar(0, 255, 0), 2); 
 								count++;
 							}
-
 						}
 						if (count == 0) { 
 							strcpy(a, "Wybierasz:  KAMIEN");
@@ -124,7 +123,7 @@ int main(int argc, const char** argv)
 							strcpy(a, "Wybierasz:  KAMIEN");
 							playerChoice = 1;
 						}
-						putText(flipped_game, a, cvPoint(380, 90), FONT_HERSHEY_PLAIN, 1.2, cvScalar(255, 255, 255), 1, CV_AA); 
+						putText(flipped_game, a, cvPoint(80, 90), FONT_HERSHEY_PLAIN, 1.2, cvScalar(255, 255, 255), 1, CV_AA); 
 					}
 				}
 			}
@@ -163,19 +162,19 @@ int main(int argc, const char** argv)
 				}
 			}
 			string timer2 = "Runda konczy sie za: "; 
-			putText(flipped_game, timer2, cvPoint(30, 50), FONT_HERSHEY_COMPLEX, 0.7, cvScalar(0, 0, 0), 1, CV_AA);
+			putText(flipped_game, timer2, cvPoint(350, 50), FONT_HERSHEY_COMPLEX, 0.7, cvScalar(0, 0, 0), 1, CV_AA);
 			string timer = to_string(5 - (int)(time_counter / 1000)); 
-			putText(flipped_game, timer, cvPoint(30, 140), FONT_HERSHEY_DUPLEX, 3, cvScalar(0, 0, 255), 2, CV_AA);
+			putText(flipped_game, timer, cvPoint(450, 140), FONT_HERSHEY_DUPLEX, 3, cvScalar(0, 0, 255), 2, CV_AA);
 
 			string playerScore2 = "Gracz: ";
-			putText(flipped_game, playerScore2, cvPoint(30, 350), FONT_HERSHEY_COMPLEX, 0.7, cvScalar(0, 0, 0), 1, CV_AA);
+			putText(flipped_game, playerScore2, cvPoint(450, 350), FONT_HERSHEY_COMPLEX, 0.7, cvScalar(0, 0, 0), 1, CV_AA);
 			string playerScore = to_string(player);
-			putText(flipped_game, playerScore, cvPoint(115, 350), FONT_HERSHEY_SCRIPT_SIMPLEX, 0.7, cvScalar(255, 255, 255), 2, CV_AA);
+			putText(flipped_game, playerScore, cvPoint(530, 350), FONT_HERSHEY_SCRIPT_SIMPLEX, 0.7, cvScalar(255, 255, 255), 2, CV_AA);
 
 			string computerScore2 = "Komputer: ";
-			putText(flipped_game, computerScore2, cvPoint(30, 300), FONT_HERSHEY_COMPLEX, 0.7, cvScalar(0, 0, 0), 1, CV_AA);
+			putText(flipped_game, computerScore2, cvPoint(430, 300), FONT_HERSHEY_COMPLEX, 0.7, cvScalar(0, 0, 0), 1, CV_AA);
 			string computerScore = to_string(computer);
-			putText(flipped_game, computerScore, cvPoint(165, 300), FONT_HERSHEY_SCRIPT_SIMPLEX, 0.7, cvScalar(255, 255, 255), 2, CV_AA);
+			putText(flipped_game, computerScore, cvPoint(565, 300), FONT_HERSHEY_SCRIPT_SIMPLEX, 0.7, cvScalar(255, 255, 255), 2, CV_AA);
 			
 			
 			if (finished == false) 
